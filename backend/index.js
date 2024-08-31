@@ -10,23 +10,29 @@ const secretKey = process.env.SECRET_KEY || 'secreta';
 
 const app = express();
 
+// Configuração do CORS
+app.use(cors({
+  origin: 'http://localhost:3000', // Permite o frontend local
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Configuração do multer para upload de arquivos em memória
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Configuração do Express
-app.use(cors());
 app.use(express.json({ limit: '50mb' }));  // Limite aumentado para 50MB
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));  // Limite aumentado para 50MB
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-	host: process.env.DB_HOST || 'localhost',
-	user: process.env.DB_USER || 'root',
-	password: process.env.DB_PASS || '@Dudu2801',
-	database: process.env.DB_NAME || 'ecoplaint',
-	port: 3306
-	});
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASS || '@Dudu2801',
+  database: process.env.DB_NAME || 'ecoplaint',
+  port: 3306
+});
 
 db.connect(err => {
   if (err) {
