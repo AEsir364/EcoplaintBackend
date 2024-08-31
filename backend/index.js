@@ -5,14 +5,15 @@ const mysql = require('mysql2');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 // Chave secreta para o JWT
 const secretKey = process.env.SECRET_KEY || 'secreta';
 
 const app = express();
 
-// Configuração do CORS
+// Configuração do CORS para permitir conexões do frontend
 app.use(cors({
-  origin: 'http://localhost:3000', // Permite o frontend local
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Altere para a URL do frontend em produção, se aplicável
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -32,9 +33,9 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));  // Limite aumen
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '@Dudu2801',
+  password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'ecoplaint',
-  port: 3306
+  port: process.env.DB_PORT || 3306
 });
 
 db.connect(err => {
