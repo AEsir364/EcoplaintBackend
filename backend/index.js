@@ -17,6 +17,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Habilita o tratamento das requisições OPTIONS para todas as rotas
+app.options('*', cors());
+
 // Configuração do multer para upload de arquivos em memória
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
