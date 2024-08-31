@@ -5,7 +5,8 @@ const mysql = require('mysql2');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const secretKey = 'secreta'; // Guarde essa chave de forma segura
+// Chave secreta para o JWT
+const secretKey = process.env.SECRET_KEY || 'secreta';
 
 const app = express();
 
@@ -20,12 +21,12 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));  // Limite aumen
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'alan',
-  database: 'ecoplaint',
-  port: 3306
-});
+	host: process.env.DB_HOST || 'localhost',
+	user: process.env.DB_USER || 'root',
+	password: process.env.DB_PASS || '@Dudu2801',
+	database: process.env.DB_NAME || 'ecoplaint',
+	port: 3306
+	});
 
 db.connect(err => {
   if (err) {
