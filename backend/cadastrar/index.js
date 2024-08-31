@@ -31,7 +31,7 @@ app.post('/api/cadastrar', async (req, res) => {
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(senha, 10); // Hash da senha
+    const hashedPassword = await bcrypt.hash(senha, 10);
     const query = 'INSERT INTO usuarios (usua_nome, usua_email, usua_senha) VALUES (?, ?, ?)';
     db.query(query, [nome, email, hashedPassword], (err, results) => {
       if (err) {

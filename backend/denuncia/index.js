@@ -51,7 +51,7 @@ const authenticateJWT = (req, res, next) => {
 
 // Endpoint para envio de denúncia com múltiplas imagens
 app.post('/api/denuncia', authenticateJWT, upload.array('imagens', 4), async (req, res) => {
-  const connection = db;  // Usa a conexão do MySQL existente
+  const connection = db;  
   connection.beginTransaction(err => {
     if (err) {
       console.error('Erro ao iniciar a transação:', err);
