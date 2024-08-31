@@ -6,13 +6,11 @@ const app = express();
 
 const secretKey = process.env.SECRET_KEY || 'secreta';
 
-// Configuração do multer para upload de arquivos em memória
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.use(express.json());
 
-// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -29,11 +27,9 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-// Middleware de autenticação para verificar JWT
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.header('Authorization');
   if (!authHeader) {
-    console.log('Token não fornecido.');
     return res.status(403).send('Acesso negado.');
   }
 
@@ -44,17 +40,14 @@ const authenticateJWT = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.log('Erro ao verificar o token:', error.message);
     res.status(401).send('Token inválido.');
   }
 };
 
-// Endpoint para envio de denúncia com múltiplas imagens
 app.post('/api/denuncia', authenticateJWT, upload.array('imagens', 4), async (req, res) => {
   const connection = db;  
   connection.beginTransaction(err => {
     if (err) {
-      console.error('Erro ao iniciar a transação:', err);
       return res.status(500).json({ message: 'Erro no servidor', error: err.message });
     }
 
@@ -68,33 +61,27 @@ app.post('/api/denuncia', authenticateJWT, upload.array('imagens', 4), async (re
 
       const userId = manterAnonimo === 'true' || manterAnonimo === true ? null : req.user.usua_id_usuario;
 
-      console.log('Dados da denúncia:', { userId, opcaoSelecionada, localizacao, manterAnonimo });
-
       const denunciaQuery = `
         INSERT INTO denuncias (denu_id_usuario, denu_imagem, denu_categoria, denu_localizacao, denu_manter_anonimo, denu_dt_denuncia)
         VALUES (?, ?, ?, ?, ?, NOW())`;
 
       connection.query(denunciaQuery, [userId, imagensParaSalvar[0], opcaoSelecionada, localizacao, manterAnonimo ? 1 : 0], (err, results) => {
         if (err) {
-          console.error('Erro ao registrar denúncia:', err);
           return connection.rollback(() => {
             res.status(500).json({ message: 'Erro ao registrar denúncia', error: err.message });
           });
         }
 
         const denunciaId = results.insertId;
-        console.log('Denúncia registrada com ID:', denunciaId);
 
         const notiQuery = `
           INSERT INTO notificacoes (noti_id_usuario, noti_tipo_notificacao, noti_mensagem, noti_lida, noti_dt_envio)
           VALUES (?, ?, ?, ?, NOW())`;
 
         const mensagemNotificacao = `Denúncia enviada: ${opcaoSelecionada} em ${localizacao}`;
-        console.log('Tentando inserir notificação com a mensagem:', mensagemNotificacao);
 
         connection.query(notiQuery, [userId, 'Push Notification', mensagemNotificacao, false], (err, result) => {
           if (err) {
-            console.error('Erro ao registrar notificação:', err);
             return connection.rollback(() => {
               res.status(500).json({ message: 'Erro ao registrar notificação', error: err.message });
             });
@@ -102,7 +89,6 @@ app.post('/api/denuncia', authenticateJWT, upload.array('imagens', 4), async (re
 
           connection.commit(err => {
             if (err) {
-              console.error('Erro ao confirmar a transação:', err);
               return connection.rollback(() => {
                 res.status(500).json({ message: 'Erro ao confirmar a transação', error: err.message });
               });
@@ -114,7 +100,6 @@ app.post('/api/denuncia', authenticateJWT, upload.array('imagens', 4), async (re
       });
 
     } catch (error) {
-      console.error('Erro ao processar a denúncia:', error);
       return connection.rollback(() => {
         res.status(500).json({ message: 'Erro no servidor', error: error.message });
       });

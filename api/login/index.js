@@ -8,7 +8,6 @@ app.use(express.json());
 
 const secretKey = process.env.SECRET_KEY || 'secreta';
 
-// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',

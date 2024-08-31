@@ -4,7 +4,6 @@ const app = express();
 
 app.use(express.json());
 
-// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -21,7 +20,6 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-// Endpoint para buscar todas as notificações
 app.get('/api/notificacoes/todas', (req, res) => {
   const query = `
     SELECT noti_id_notificacao, noti_tipo_notificacao, noti_mensagem, noti_lida, 
@@ -31,7 +29,6 @@ app.get('/api/notificacoes/todas', (req, res) => {
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Erro ao buscar notificações:', err);
       return res.status(500).json({ message: 'Erro ao buscar notificações', error: err.message });
     }
 

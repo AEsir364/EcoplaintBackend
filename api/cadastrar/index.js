@@ -5,7 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
