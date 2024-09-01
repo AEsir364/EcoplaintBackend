@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/api/cadastrar", "dest": "/api/cadastrar/index.js" },
+    { "src": "/api/denuncia", "dest": "/api/denuncia/index.js" },
+    { "src": "/api/login", "dest": "/api/login/index.js" },
+    { "src": "/api/notificacoes", "dest": "/api/notificacoes/index.js" }
+  ]
+}

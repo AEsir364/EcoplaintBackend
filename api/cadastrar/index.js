@@ -5,7 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -22,7 +21,6 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-// Endpoint para cadastro
 app.post('/', async (req, res) => {
   const { nome, email, senha } = req.body;
 

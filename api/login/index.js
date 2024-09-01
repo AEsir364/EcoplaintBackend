@@ -8,7 +8,6 @@ app.use(express.json());
 
 const secretKey = process.env.SECRET_KEY;
 
-// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -25,7 +24,6 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-// Endpoint para login
 app.post('/', (req, res) => {
   const { email, senha } = req.body;
 

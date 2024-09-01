@@ -20,7 +20,6 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-// Endpoint para buscar todas as notificações
 app.get('/', (req, res) => {
   const query = `
     SELECT noti_id_notificacao, noti_tipo_notificacao, noti_mensagem, noti_lida, 
