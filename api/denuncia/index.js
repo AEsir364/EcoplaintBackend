@@ -4,19 +4,21 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const app = express();
 
-const secretKey = process.env.SECRET_KEY || 'secreta';
+const secretKey = process.env.SECRET_KEY;
 
+// Configuração do multer para upload de arquivos em memória
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.use(express.json());
 
+// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
-  database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 3306
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 db.connect(err => {
@@ -27,6 +29,7 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
+// Middleware de autenticação para verificar JWT
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.header('Authorization');
   if (!authHeader) {
@@ -44,8 +47,9 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
+// Endpoint para envio de denúncia com múltiplas imagens
 app.post('/', authenticateJWT, upload.array('imagens', 4), async (req, res) => {
-  const connection = db;  
+  const connection = db;
   connection.beginTransaction(err => {
     if (err) {
       return res.status(500).json({ message: 'Erro no servidor', error: err.message });

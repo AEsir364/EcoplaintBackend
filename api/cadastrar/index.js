@@ -7,11 +7,11 @@ app.use(express.json());
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
-  database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 3306
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 db.connect(err => {
@@ -35,16 +35,11 @@ app.post('/', async (req, res) => {
     const query = 'INSERT INTO usuarios (usua_nome, usua_email, usua_senha) VALUES (?, ?, ?)';
     db.query(query, [nome, email, hashedPassword], (err, results) => {
       if (err) {
-        console.error('Erro ao cadastrar usuário:', err);
-        return res.status(500).send({
-          error: 'Erro ao cadastrar usuário',
-          details: err.message
-        });
+        return res.status(500).send({ error: 'Erro ao cadastrar usuário', details: err.message });
       }
       res.status(200).send('Usuário cadastrado com sucesso!');
     });
   } catch (error) {
-    console.error('Erro ao cadastrar usuário:', error);
     res.status(500).send('Erro no servidor');
   }
 });

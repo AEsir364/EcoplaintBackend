@@ -6,15 +6,15 @@ const app = express();
 
 app.use(express.json());
 
-const secretKey = process.env.SECRET_KEY || 'secreta';
+const secretKey = process.env.SECRET_KEY;
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
-  database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 3306
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 db.connect(err => {
@@ -36,7 +36,6 @@ app.post('/', (req, res) => {
   const query = 'SELECT * FROM usuarios WHERE usua_email = ?';
   db.query(query, [email], async (err, results) => {
     if (err) {
-      console.error('Erro ao buscar usuário:', err);
       return res.status(500).send('Erro no servidor');
     }
 

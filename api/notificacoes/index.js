@@ -5,11 +5,11 @@ const app = express();
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
-  database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 3306
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 db.connect(err => {
@@ -20,6 +20,7 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
+// Endpoint para buscar todas as notificações
 app.get('/', (req, res) => {
   const query = `
     SELECT noti_id_notificacao, noti_tipo_notificacao, noti_mensagem, noti_lida, 
