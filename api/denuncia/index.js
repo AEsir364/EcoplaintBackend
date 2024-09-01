@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const app = express();
+require('dotenv').config();
 
 const secretKey = process.env.SECRET_KEY || 'secreta';
 
