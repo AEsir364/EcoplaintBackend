@@ -8,9 +8,9 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '',
+  password: process.env.DB_PASS || 'alan',
   database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 3306
+  port: process.env.DB_PORT || 5001
 });
 
 db.connect(err => {
