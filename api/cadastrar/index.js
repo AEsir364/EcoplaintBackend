@@ -2,16 +2,16 @@ const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const app = express();
-require('dotenv').config();
 
 app.use(express.json());
 
+// Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
+  password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 5001
+  port: process.env.DB_PORT || 3306
 });
 
 db.connect(err => {
@@ -22,8 +22,8 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-// Endpoint para cadastro com hash de senha
-app.post('/api/cadastrar', async (req, res) => {
+// Endpoint para cadastro
+app.post('/', async (req, res) => {
   const { nome, email, senha } = req.body;
 
   if (!nome || !email || !senha) {

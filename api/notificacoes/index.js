@@ -1,16 +1,15 @@
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
-require('dotenv').config();
 
 app.use(express.json());
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
+  password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 5001
+  port: process.env.DB_PORT || 3306
 });
 
 db.connect(err => {
@@ -21,7 +20,7 @@ db.connect(err => {
   console.log('Conectado ao banco de dados MySQL');
 });
 
-app.get('/api/notificacoes/todas', (req, res) => {
+app.get('/', (req, res) => {
   const query = `
     SELECT noti_id_notificacao, noti_tipo_notificacao, noti_mensagem, noti_lida, 
            DATE_FORMAT(noti_dt_envio, '%d/%m/%Y %H:%i:%s') AS noti_dt_envio

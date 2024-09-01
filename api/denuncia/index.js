@@ -3,7 +3,6 @@ const mysql = require('mysql2');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const app = express();
-require('dotenv').config();
 
 const secretKey = process.env.SECRET_KEY || 'secreta';
 
@@ -15,9 +14,9 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'alan',
+  password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'ecoplaint',
-  port: process.env.DB_PORT || 5001
+  port: process.env.DB_PORT || 3306
 });
 
 db.connect(err => {
@@ -45,7 +44,7 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-app.post('/api/denuncia', authenticateJWT, upload.array('imagens', 4), async (req, res) => {
+app.post('/', authenticateJWT, upload.array('imagens', 4), async (req, res) => {
   const connection = db;  
   connection.beginTransaction(err => {
     if (err) {
